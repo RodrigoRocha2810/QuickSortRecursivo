@@ -1,14 +1,31 @@
 public class QuickSortR {
-
-    public static void quickSort(int[] vetor, int inicio, int fim) {
+    // Implementação do QuickSort Recursivo
+    public static void quicksort(int[] vetor, int inicio, int fim) {
         if (inicio < fim) {
             int indicePivo = particiona(vetor, inicio, fim);
-            quickSort(vetor, inicio, indicePivo - 1);
-            quickSort(vetor, indicePivo + 1, fim);
+            quicksort(vetor, inicio, indicePivo - 1);
+            quicksort(vetor, indicePivo + 1, fim);
+        }
+    }
+    // Implementação do QuickSort Recursivo com tamanho M
+    public static void quicksortM(int[] array, int inicio, int fim, int M) {
+        // A condição de parada agora é baseada no tamanho M
+        if ((fim - inicio + 1) >= M) {
+            int indicePivo = particiona(array, inicio, fim);
+            quicksort(array, inicio, indicePivo - 1);
+            quicksort(array, indicePivo + 1, fim);
         }
     }
 
     private static int particiona(int[] vetor, int inicio, int fim) {
+
+        // if(vetor.length > 1000){
+        //     InsertionSort.sort(vetor);
+        //     return vetor.length ;
+        // }
+
+
+
         int pivo = vetor[fim];
         int i = inicio - 1;
         for (int j = inicio; j < fim; j++) {
@@ -25,13 +42,5 @@ public class QuickSortR {
         int temp = vetor[i];
         vetor[i] = vetor[j];
         vetor[j] = temp;
-    }
-
-    public static void main(String[] args) {
-        int[] numeros = { 10, 7, 8, 9, 1, 5 };
-        quickSort(numeros, 0, numeros.length - 1);
-        for (int numero : numeros) {
-            System.out.print(numero + " ");
-        }
     }
 }
