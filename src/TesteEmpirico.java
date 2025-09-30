@@ -6,7 +6,7 @@ public class TesteEmpirico {
     private static final int TAMANHO_VETOR = 1000;
     private static final int NUM_TESTES_POR_M = 100; // Para ter uma média confiável
 
-    public static void main(String[] args) {
+    public static int run() {
         System.out.println("Iniciando teste empírico para encontrar o melhor M...");
         System.out.printf("Tamanho do vetor: %d | Testes por M: %d\n\n", TAMANHO_VETOR, NUM_TESTES_POR_M);
 
@@ -42,6 +42,7 @@ public class TesteEmpirico {
         System.out.println("\n-------------------------------------------------");
         System.out.printf("Conclusão: O melhor valor de M encontrado foi %d com um tempo médio de %d ns.\n", melhorM, melhorTempo);
         System.out.println("-------------------------------------------------");
+        return melhorM;
     }
 
     /**

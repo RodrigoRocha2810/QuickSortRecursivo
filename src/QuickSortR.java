@@ -19,12 +19,6 @@ public class QuickSortR {
 
     private static int particiona(int[] vetor, int inicio, int fim) {
 
-        // if(vetor.length > 1000){
-        //     InsertionSort.sort(vetor);
-        //     return vetor.length ;
-        // }
-
-
 
         int pivo = vetor[fim];
         int i = inicio - 1;
