@@ -9,13 +9,14 @@ public class Main {
     static long startTime, endTime;
     public static void main(String[] args) throws Exception {
         try (Scanner scanner = new Scanner(System.in)) {
-            while (escolha != 4) {
+            while (escolha != 5) {
                 clearScreen(); 
                 System.out.println("=== MENU PRINCIPAL ===");
                 System.out.println("[1] - QuickSort Recursivo");
                 System.out.println("[2] - Teste Empírico");
                 System.out.println("[3] - QuickSort Híbrido (requer teste empírico para definir M)");
-                System.out.println("[4] - Sair");
+                System.out.println("[4] - QuickSort Aprimorado com mediana de três(requer teste empírico para definir M)");
+                System.out.println("[5] - Sair");
                 System.out.println("[C] - Limpar Tela");
                 System.out.print("\nEscolha uma opção: ");
                 
@@ -79,10 +80,24 @@ public class Main {
                         escolha = -1; 
                     }
                     case 4 -> {
+                        if (M == -1) {
+                            System.out.println("Você precisa rodar o Teste Empírico primeiro para definir M.");
+                            pressEnterToClear(scanner);
+                            escolha = -1; 
+                            return;
+                        }
+                        QuicksortAprimorado sorter = new QuicksortAprimorado(M);
+                        // to do
+                        System.out.println("QuickSort Aprimorado executado com M = " + M);
+                        pressEnterToClear(scanner);
+                        escolha = -1; 
+                    }
+                    case 5 -> {
                         clearScreen();
                         System.out.println("Saindo...");
                         return;
                     }
+
                     default -> {
                         System.out.println("Opção inválida! Pressione Enter para continuar...");
                         scanner.nextLine();

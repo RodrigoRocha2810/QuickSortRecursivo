@@ -1,4 +1,6 @@
+
 public class QuickSortR {
+
     // Implementação do QuickSort Recursivo
     public static void quicksort(int[] vetor, int inicio, int fim) {
         if (inicio < fim) {
@@ -17,32 +19,66 @@ public class QuickSortR {
         }
     }
     // Implementação do QuickSort Recursivo com mediana de três e tamanho M
+    public static void quicksortA(int[] array, int inicio, int fim, int M) {
+        // A condição de parada agora é baseada no tamanho M
+        if ((fim - inicio + 1) >= M) {
+            int indicePivo = particiona3(array, inicio, fim);
+            quicksortA(array, inicio, indicePivo - 1, M);
+            quicksortA(array, indicePivo + 1, fim, M);
+        }
+    }
+
     
+     // Método responsável APENAS por particionar um sub-vetor. Utiliza a mediana de três e o esquema de Hoare.
+     
+    private static int particiona3(int[] array, int inicio, int fim) {
+        int pivo = medianaDeTres(array, inicio, fim);
 
+        int i = inicio;
+        int j = fim - 1;
 
+        while (true) {
+            while (array[i] < pivo) {
+                i++;
+            }
+            while (j > inicio && array[j] > pivo) {
+                j--;
+            }
 
+            if (i >= j) {
+                break;
+            }
 
+            troca(array, i, j);
+            i++;
+            j--;
+        }
 
+        // Coloca o pivô (que estava em fim-1) na sua posição final
+        troca(array, i, fim - 1);
+        return i;
+    }
 
+    //Encontra a mediana de três e posiciona o pivô.
+    private static int medianaDeTres(int[] array, int inicio, int fim) {
+        int meio = inicio + (fim - inicio) / 2;
 
+        if (array[inicio] > array[meio]) {
+            troca(array, inicio, meio);
+        }
+        if (array[inicio] > array[fim]) {
+            troca(array, inicio, fim);
+        }
+        if (array[meio] > array[fim]) {
+            troca(array, meio, fim);
+        }
 
+        // A mediana (array[meio]) é movida para a penúltima posição
+        troca(array, meio, fim - 1);
+        return array[fim - 1];
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  private static int particiona(int[] vetor, int inicio, int fim) {
-
+    private static int particiona(int[] vetor, int inicio, int fim) {
 
         int pivo = vetor[fim];
         int i = inicio - 1;
