@@ -11,10 +11,8 @@ public class QuicksortHibrido {
         this.M = m;
     }
 
-    /**
-     * Método público que inicia a ordenação.
-     * @param array O array a ser ordenado.
-     */
+    // Método público que inicia a ordenação.
+
     public void ordenar(int[] array) {
         if (array == null || array.length == 0) {
             return;
@@ -76,4 +74,10 @@ public class QuicksortHibrido {
     //     array[i] = array[j];
     //     array[j] = temp;
     // }
+
+
+
+
+
+
 }

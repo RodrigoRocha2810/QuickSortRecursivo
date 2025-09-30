@@ -12,12 +12,36 @@ public class QuickSortR {
         // A condição de parada agora é baseada no tamanho M
         if ((fim - inicio + 1) >= M) {
             int indicePivo = particiona(array, inicio, fim);
-            quicksort(array, inicio, indicePivo - 1);
-            quicksort(array, indicePivo + 1, fim);
+            quicksortM(array, inicio, indicePivo - 1, M);
+            quicksortM(array, indicePivo + 1, fim, M);
         }
     }
+    // Implementação do QuickSort Recursivo com mediana de três e tamanho M
+    
 
-    private static int particiona(int[] vetor, int inicio, int fim) {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  private static int particiona(int[] vetor, int inicio, int fim) {
 
 
         int pivo = vetor[fim];
