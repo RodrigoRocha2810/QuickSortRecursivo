@@ -11,23 +11,25 @@ public class Resultados {
     double tempoExecucao; // em milissegundos
     String dataHora; // timestamp da execução
     int valorM; // valor de M usado (se aplicável)
+    int maxV; // valor máximo usado na geração dos arrays
     
     // Lista estática para armazenar todos os resultados
     private static List<Resultados> historicoResultados = new ArrayList<>();
 
-    public Resultados(String nomeAlgoritmo, int tamanhoArray, int numTrocas, int numComparacoes, double tempoExecucao, int valorM) {
+    public Resultados(String nomeAlgoritmo, int tamanhoArray, int numTrocas, int numComparacoes, double tempoExecucao, int valorM, int maxV) {
         this.nomeAlgoritmo = nomeAlgoritmo;
         this.tamanhoArray = tamanhoArray;
         this.numTrocas = numTrocas;
         this.numComparacoes = numComparacoes;
         this.tempoExecucao = tempoExecucao;
         this.valorM = valorM;
+        this.maxV = maxV;
         this.dataHora = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
     }
     
     // Construtor para algoritmos que não usam M
-    public Resultados(String nomeAlgoritmo, int tamanhoArray, int numTrocas, int numComparacoes, double tempoExecucao) {
-        this(nomeAlgoritmo, tamanhoArray, numTrocas, numComparacoes, tempoExecucao, -1);
+    public Resultados(String nomeAlgoritmo, int tamanhoArray, int numTrocas, int numComparacoes, double tempoExecucao, int maxV) {
+        this(nomeAlgoritmo, tamanhoArray, numTrocas, numComparacoes, tempoExecucao, -1, maxV);
     }
     
     // Método para adicionar resultado ao histórico
@@ -52,6 +54,7 @@ public class Resultados {
             System.out.println("Algoritmo: " + r.nomeAlgoritmo);
             System.out.println("Data/Hora: " + r.dataHora);
             System.out.println("Tamanho do array: " + r.tamanhoArray);
+            System.out.println("Valor máximo (maxV): " + r.maxV);
             System.out.println("Tempo de execução: " + String.format("%.2f", r.tempoExecucao) + " ms");
             System.out.println("Número de trocas: " + r.numTrocas);
             System.out.println("Número de comparações: " + r.numComparacoes);
@@ -116,6 +119,7 @@ public class Resultados {
     public double getTempoExecucao() { return tempoExecucao; }
     public String getDataHora() { return dataHora; }
     public int getValorM() { return valorM; }
+    public int getMaxV() { return maxV; }
     
     // Método para obter quantidade de resultados armazenados
     public static int getTotalResultados() {

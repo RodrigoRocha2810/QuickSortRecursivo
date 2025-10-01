@@ -5,13 +5,13 @@ import java.util.Scanner;
 
 public class Main {
 
-    static int maxV = 1000000, M = -1, escolha;
+    static int maxV = 10000000, M = -1, escolha;
     static long startTime, endTime;
     public static void main(String[] args) throws Exception {
         int[] randomArray = generateRandomArray(maxV);
         int[] randomArraycopy;
         try (Scanner scanner = new Scanner(System.in)) {
-            while (escolha != 7) {
+            while (escolha != 8) {
                 clearScreen(); 
                 System.out.println("=== MENU PRINCIPAL ===");
                 System.out.println("[1] - QuickSort Recursivo");
@@ -19,8 +19,9 @@ public class Main {
                 System.out.println("[3] - QuickSort Híbrido (requer teste empírico para definir M)");
                 System.out.println("[4] - QuickSort Aprimorado com mediana de três(requer teste empírico para definir M)");
                 System.out.println("[5] - Ver Histórico de Resultados");
-                System.out.println("[6] - Comparar Último Resultado");
-                System.out.println("[7] - Sair");
+                System.out.println("[6] - Último Resultado");
+                System.out.println("[7] - Teste Completo (10 execuções de cada algoritmo)");
+                System.out.println("[8] - Sair");
                 System.out.println("[C] - Limpar Tela");
                 System.out.print("\nEscolha uma opção: ");
                 
@@ -70,7 +71,7 @@ public class Main {
                         
                         // Armazenar resultado
                         Resultados resultado = new Resultados("QuickSort Recursivo", randomArraycopy.length, 
-                                                             QuickSortR.trocas, QuickSortR.comparacoes, executionTime);
+                                                             QuickSortR.trocas, QuickSortR.comparacoes, executionTime, maxV);
                         Resultados.adicionarResultado(resultado);
                         
                         pressEnterToClear(scanner);
@@ -90,8 +91,8 @@ public class Main {
                             return;
                         }
                         
-                        // Preenche o array com maxV valores aleatórios
-                        int[] hibridoArray = generateRandomArray(maxV);
+                        // Usa o mesmo array que o caso 1 para comparação justa
+                        int[] hibridoArray = randomArray.clone();
                         
                         // Mostra os primeiros 20 valores antes da ordenação
                         System.out.println("Primeiros 20 valores antes da ordenação:");
@@ -120,7 +121,7 @@ public class Main {
                         
                         // Armazenar resultado
                         Resultados resultadoHibrido = new Resultados("QuickSort Híbrido", hibridoArray.length, 
-                                                                    QuickSortR.trocas, QuickSortR.comparacoes, executionTime, M);
+                                                                    QuickSortR.trocas, QuickSortR.comparacoes, executionTime, M, maxV);
                         Resultados.adicionarResultado(resultadoHibrido);
                         
                         pressEnterToClear(scanner);
@@ -134,8 +135,8 @@ public class Main {
                             return;
                         }
                         
-                        // Preenche o array com maxV valores aleatórios
-                        int[] aprimoradoArray = generateRandomArray(maxV);
+                        // Usa o mesmo array que o caso 1 para comparação justa
+                        int[] aprimoradoArray = randomArray.clone();
                         
                         // Mostra os primeiros 20 valores antes da ordenação
                         System.out.println("Primeiros 20 valores antes da ordenação:");
@@ -164,7 +165,7 @@ public class Main {
                         
                         // Armazenar resultado
                         Resultados resultadoAprimorado = new Resultados("QuickSort Aprimorado", aprimoradoArray.length, 
-                                                                       QuickSortR.trocas, QuickSortR.comparacoes, executionTime, M);
+                                                                       QuickSortR.trocas, QuickSortR.comparacoes, executionTime, M, maxV);
                         Resultados.adicionarResultado(resultadoAprimorado);
                         
                         pressEnterToClear(scanner);
@@ -181,6 +182,12 @@ public class Main {
                         escolha = -1;
                     }
                     case 7 -> {
+                        // Teste Completo - 10 execuções de cada algoritmo
+                        executarTesteCompleto(scanner);
+                        pressEnterToClear(scanner);
+                        escolha = -1;
+                    }
+                    case 8 -> {
                         clearScreen();
                         System.out.println("Saindo... Obrigado por usar o programa!");
                         return;
@@ -319,5 +326,109 @@ public class Main {
         System.out.println("\nPressione Enter para limpar a tela e continuar...");
         scanner.nextLine();
         clearScreen();
+    }
+    
+    /**
+     * Executa teste completo com 10 execuções de cada algoritmo
+     */
+    private static void executarTesteCompleto(Scanner scanner) {
+        System.out.println("\n=== TESTE COMPLETO - 10 EXECUÇÕES DE CADA ALGORITMO ===");
+        System.out.println("Este teste executará:");
+        System.out.println("- Teste Empírico (1x) para definir M");
+        System.out.println("- QuickSort Recursivo (10x)");
+        System.out.println("- QuickSort Híbrido (10x)");
+        System.out.println("- QuickSort Aprimorado (10x)");
+        System.out.println("\nDeseja continuar? (S/N): ");
+        
+        String confirmacao = scanner.nextLine().trim();
+        if (!confirmacao.equalsIgnoreCase("S") && !confirmacao.equalsIgnoreCase("Y")) {
+            System.out.println("Teste cancelado.");
+            return;
+        }
+        
+        clearScreen();
+        System.out.println("=== INICIANDO TESTE COMPLETO ===");
+        
+        // 1. Executar teste empírico se M não estiver definido
+        if (M == -1) {
+            System.out.println("\n[1/4] Executando Teste Empírico para definir M...");
+            M = TesteEmpirico.run();
+            System.out.println("✓ Teste Empírico concluído. M = " + M);
+        } else {
+            System.out.println("✓ Valor M já definido: " + M);
+        }
+        
+        // 2. Executar QuickSort Recursivo 10 vezes
+        System.out.println("\n[2/4] Executando QuickSort Recursivo (10 execuções)...");
+        executarTestesMultiplos("QuickSort Recursivo", 1, 10);
+        
+        // 3. Executar QuickSort Híbrido 10 vezes
+        System.out.println("\n[3/4] Executando QuickSort Híbrido (10 execuções)...");
+        executarTestesMultiplos("QuickSort Híbrido", 2, 10);
+        
+        // 4. Executar QuickSort Aprimorado 10 vezes
+        System.out.println("\n[4/4] Executando QuickSort Aprimorado (10 execuções)...");
+        executarTestesMultiplos("QuickSort Aprimorado", 3, 10);
+        
+        System.out.println("\n=== TESTE COMPLETO FINALIZADO ===");
+        System.out.println("✓ Total de " + (30) + " execuções realizadas!");
+        System.out.println("✓ Todos os resultados foram salvos no histórico.");
+        System.out.println("✓ Use a opção [5] para ver o histórico completo.");
+        System.out.println("✓ Use a opção [6] para comparar os resultados.");
+    }
+    
+    /**
+     * Executa múltiplos testes do mesmo algoritmo
+     */
+    private static void executarTestesMultiplos(String nomeAlgoritmo, int tipoAlgoritmo, int numExecucoes) {
+        for (int i = 1; i <= numExecucoes; i++) {
+            System.out.print("  Execução " + i + "/" + numExecucoes + "... ");
+            
+            // Gerar novo array para cada execução
+            int[] testArray = generateRandomArray(maxV);
+            
+            // Reset counters
+            QuickSortR.trocas = 0;
+            QuickSortR.comparacoes = 0;
+            
+            long testStartTime = System.nanoTime();
+            
+            // Executar o algoritmo específico
+            switch (tipoAlgoritmo) {
+                case 1 -> { // QuickSort Recursivo
+                    int[] arrayRecursivo = testArray.clone();
+                    QuickSortR.quicksort(arrayRecursivo, 0, arrayRecursivo.length - 1);
+                }
+                case 2 -> { // QuickSort Híbrido
+                    int[] arrayHibrido = testArray.clone();
+                    QuicksortHibrido sorterHibrido = new QuicksortHibrido(M);
+                    sorterHibrido.ordenar(arrayHibrido);
+                }
+                case 3 -> { // QuickSort Aprimorado
+                    int[] arrayAprimorado = testArray.clone();
+                    QuicksortAprimorado sorterAprimorado = new QuicksortAprimorado(M);
+                    sorterAprimorado.ordenar(arrayAprimorado);
+                }
+            }
+            
+            long testEndTime = System.nanoTime();
+            double executionTime = (testEndTime - testStartTime) / 1_000_000.0;
+            
+            // Salvar resultado
+            if (tipoAlgoritmo == 1) {
+                // QuickSort Recursivo (sem M)
+                Resultados resultado = new Resultados(nomeAlgoritmo + " #" + i, testArray.length, 
+                                                     QuickSortR.trocas, QuickSortR.comparacoes, executionTime, maxV);
+                Resultados.adicionarResultado(resultado);
+            } else {
+                // QuickSort Híbrido ou Aprimorado (com M)
+                Resultados resultado = new Resultados(nomeAlgoritmo + " #" + i, testArray.length, 
+                                                     QuickSortR.trocas, QuickSortR.comparacoes, executionTime, M, maxV);
+                Resultados.adicionarResultado(resultado);
+            }
+            
+            System.out.println("✓ " + String.format("%.2f", executionTime) + " ms");
+        }
+        System.out.println("✓ " + nomeAlgoritmo + " concluído!");
     }
 }
