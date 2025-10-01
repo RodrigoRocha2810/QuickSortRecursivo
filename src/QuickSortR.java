@@ -1,8 +1,10 @@
 
 public class QuickSortR {
-
+    static int trocas;
+    static int comparacoes;
     // Implementação do QuickSort Recursivo
     public static void quicksort(int[] vetor, int inicio, int fim) {
+        comparacoes++;
         if (inicio < fim) {
             int indicePivo = particiona(vetor, inicio, fim);
             quicksort(vetor, inicio, indicePivo - 1);
@@ -12,6 +14,7 @@ public class QuickSortR {
     // Implementação do QuickSort Recursivo com tamanho M
     public static void quicksortM(int[] array, int inicio, int fim, int M) {
         // A condição de parada agora é baseada no tamanho M
+        comparacoes++;
         if ((fim - inicio + 1) >= M) {
             int indicePivo = particiona(array, inicio, fim);
             quicksortM(array, inicio, indicePivo - 1, M);
@@ -21,6 +24,7 @@ public class QuickSortR {
     // Implementação do QuickSort Recursivo com mediana de três e tamanho M
     public static void quicksortA(int[] array, int inicio, int fim, int M) {
         // A condição de parada agora é baseada no tamanho M
+        comparacoes++;
         if ((fim - inicio + 1) >= M) {
             int indicePivo = particiona3(array, inicio, fim);
             quicksortA(array, inicio, indicePivo - 1, M);
@@ -30,7 +34,6 @@ public class QuickSortR {
 
     
      // Método responsável APENAS por particionar um sub-vetor. Utiliza a mediana de três e o esquema de Hoare.
-     
     private static int particiona3(int[] array, int inicio, int fim) {
         int pivo = medianaDeTres(array, inicio, fim);
 
@@ -38,13 +41,16 @@ public class QuickSortR {
         int j = fim - 1;
 
         while (true) {
+            comparacoes++;
             while (array[i] < pivo) {
+                comparacoes++;
                 i++;
             }
             while (j > inicio && array[j] > pivo) {
+                comparacoes= comparacoes + 2;
                 j--;
             }
-
+            comparacoes++;
             if (i >= j) {
                 break;
             }
@@ -62,7 +68,8 @@ public class QuickSortR {
     //Encontra a mediana de três e posiciona o pivô.
     private static int medianaDeTres(int[] array, int inicio, int fim) {
         int meio = inicio + (fim - inicio) / 2;
-
+        // Ordena os três valores: array[inicio], array[meio], array[fim]
+         comparacoes= comparacoes + 3;
         if (array[inicio] > array[meio]) {
             troca(array, inicio, meio);
         }
@@ -78,11 +85,13 @@ public class QuickSortR {
         return array[fim - 1];
     }
 
+    // Método responsável APENAS por particionar um sub-vetor.
     private static int particiona(int[] vetor, int inicio, int fim) {
 
         int pivo = vetor[fim];
         int i = inicio - 1;
-        for (int j = inicio; j < fim; j++) {
+        for (int j = inicio; j < fim; j++, comparacoes++) {
+            comparacoes++;
             if (vetor[j] <= pivo) {
                 i++;
                 troca(vetor, i, j);
@@ -96,5 +105,6 @@ public class QuickSortR {
         int temp = vetor[i];
         vetor[i] = vetor[j];
         vetor[j] = temp;
+        trocas++;
     }
 }

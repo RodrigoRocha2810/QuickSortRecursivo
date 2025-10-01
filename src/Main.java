@@ -8,20 +8,23 @@ public class Main {
     static int maxV = 1000000, M = -1, escolha;
     static long startTime, endTime;
     public static void main(String[] args) throws Exception {
+        int[] randomArray = generateRandomArray(maxV);
+        int[] randomArraycopy;
         try (Scanner scanner = new Scanner(System.in)) {
-            while (escolha != 5) {
+            while (escolha != 7) {
                 clearScreen(); 
                 System.out.println("=== MENU PRINCIPAL ===");
                 System.out.println("[1] - QuickSort Recursivo");
                 System.out.println("[2] - Teste Empírico");
                 System.out.println("[3] - QuickSort Híbrido (requer teste empírico para definir M)");
                 System.out.println("[4] - QuickSort Aprimorado com mediana de três(requer teste empírico para definir M)");
-                System.out.println("[5] - Sair");
+                System.out.println("[5] - Ver Histórico de Resultados");
+                System.out.println("[6] - Comparar Último Resultado");
+                System.out.println("[7] - Sair");
                 System.out.println("[C] - Limpar Tela");
                 System.out.print("\nEscolha uma opção: ");
                 
                 String input = scanner.nextLine().trim();
-                
                 // limpa a tela se o usuário digitar 'C' ou 'c'
                 if (input.equalsIgnoreCase("C")) {
                     clearScreen();
@@ -38,30 +41,43 @@ public class Main {
 
                 switch (escolha) {
                     case 1 -> {
-                        // Preenche o array com maxV valores aleatórios
-                        int[] randomArray = generateRandomArray(maxV);
-
+                        //reseta os timers
+                        startTime = 0;
+                        endTime = 0;
+                        // copia o array original para preservar os dados
+                        randomArraycopy = randomArray.clone();
                         // Mostra os primeiros 20 valores antes da ordenação
                         System.out.println("Primeiros 20 valores antes da ordenação:");
-                        printFirstN(randomArray, 20);
+                        printFirstN(randomArraycopy, 20);
 
+                        // Reseta os contadores
+                        QuickSortR.trocas = 0;
+                        QuickSortR.comparacoes = 0;
+                        
                         startTime = System.nanoTime();
-                        QuickSortR.quicksort(randomArray, 0, randomArray.length - 1);
+                        QuickSortR.quicksort(randomArraycopy, 0, randomArraycopy.length - 1);
                         endTime = System.nanoTime();
                         double executionTime = (endTime - startTime) / 1_000_000.0; // Converte para milissegundos
 
                         System.out.println("\nArray completo ordenado:");
-                        printArray(randomArray);
+                        printArray(randomArraycopy);
 
                         System.out.println("\n=== RESULTADOS ===");
-                        System.out.println("Tamanho do array: " + randomArray.length);
+                        System.out.println("Tamanho do array: " + randomArraycopy.length);
                         System.out.println("Tempo de execução: " + String.format("%.2f", executionTime) + " ms");
+                        System.out.println("Número de trocas: " + QuickSortR.trocas);
+                        System.out.println("Número de comparações: " + QuickSortR.comparacoes);
+                        
+                        // Armazenar resultado
+                        Resultados resultado = new Resultados("QuickSort Recursivo", randomArraycopy.length, 
+                                                             QuickSortR.trocas, QuickSortR.comparacoes, executionTime);
+                        Resultados.adicionarResultado(resultado);
                         
                         pressEnterToClear(scanner);
                         escolha = -1; 
                     }
                     case 2 -> {
-                        // Chame aqui o método do teste empírico
+                        // Chame aqui o método do teste empírico(valores de comparações e trocas nao sao contabilizados)
                         M = TesteEmpirico.run();
                         pressEnterToClear(scanner);
                         escolha = -1; 
@@ -73,9 +89,40 @@ public class Main {
                             escolha = -1; 
                             return;
                         }
+                        
+                        // Preenche o array com maxV valores aleatórios
+                        int[] hibridoArray = generateRandomArray(maxV);
+                        
+                        // Mostra os primeiros 20 valores antes da ordenação
+                        System.out.println("Primeiros 20 valores antes da ordenação:");
+                        printFirstN(hibridoArray, 20);
+                        
+                        // Reset counters before sorting
+                        QuickSortR.trocas = 0;
+                        QuickSortR.comparacoes = 0;
+                        
                         QuicksortHibrido sorter = new QuicksortHibrido(M);
-                        // to do
-                        System.out.println("QuickSort Híbrido executado com M = " + M);
+                        
+                        startTime = System.nanoTime();
+                        sorter.ordenar(hibridoArray);
+                        endTime = System.nanoTime();
+                        double executionTime = (endTime - startTime) / 1_000_000.0; // Converte para milissegundos
+                        
+                        System.out.println("\nArray completo ordenado:");
+                        printArray(hibridoArray);
+                        
+                        System.out.println("\n=== RESULTADOS QUICKSORT HÍBRIDO ===");
+                        System.out.println("Tamanho do array: " + hibridoArray.length);
+                        System.out.println("Valor de M usado: " + M);
+                        System.out.println("Tempo de execução: " + String.format("%.2f", executionTime) + " ms");
+                        System.out.println("Número de trocas: " + QuickSortR.trocas);
+                        System.out.println("Número de comparações: " + QuickSortR.comparacoes);
+                        
+                        // Armazenar resultado
+                        Resultados resultadoHibrido = new Resultados("QuickSort Híbrido", hibridoArray.length, 
+                                                                    QuickSortR.trocas, QuickSortR.comparacoes, executionTime, M);
+                        Resultados.adicionarResultado(resultadoHibrido);
+                        
                         pressEnterToClear(scanner);
                         escolha = -1; 
                     }
@@ -86,15 +133,56 @@ public class Main {
                             escolha = -1; 
                             return;
                         }
+                        
+                        // Preenche o array com maxV valores aleatórios
+                        int[] aprimoradoArray = generateRandomArray(maxV);
+                        
+                        // Mostra os primeiros 20 valores antes da ordenação
+                        System.out.println("Primeiros 20 valores antes da ordenação:");
+                        printFirstN(aprimoradoArray, 20);
+                        
+                        // Reset counters before sorting
+                        QuickSortR.trocas = 0;
+                        QuickSortR.comparacoes = 0;
+                        
                         QuicksortAprimorado sorter = new QuicksortAprimorado(M);
-                        // to do
-                        System.out.println("QuickSort Aprimorado executado com M = " + M);
+                        
+                        startTime = System.nanoTime();
+                        sorter.ordenar(aprimoradoArray);
+                        endTime = System.nanoTime();
+                        double executionTime = (endTime - startTime) / 1_000_000.0; // Converte para milissegundos
+                        
+                        System.out.println("\nArray completo ordenado:");
+                        printArray(aprimoradoArray);
+                        
+                        System.out.println("\n=== RESULTADOS QUICKSORT APRIMORADO ===");
+                        System.out.println("Tamanho do array: " + aprimoradoArray.length);
+                        System.out.println("Valor de M usado: " + M);
+                        System.out.println("Tempo de execução: " + String.format("%.2f", executionTime) + " ms");
+                        System.out.println("Número de trocas: " + QuickSortR.trocas);
+                        System.out.println("Número de comparações: " + QuickSortR.comparacoes);
+                        
+                        // Armazenar resultado
+                        Resultados resultadoAprimorado = new Resultados("QuickSort Aprimorado", aprimoradoArray.length, 
+                                                                       QuickSortR.trocas, QuickSortR.comparacoes, executionTime, M);
+                        Resultados.adicionarResultado(resultadoAprimorado);
+                        
                         pressEnterToClear(scanner);
                         escolha = -1; 
                     }
                     case 5 -> {
+                        Resultados.exibirHistorico();
+                        pressEnterToClear(scanner);
+                        escolha = -1;
+                    }
+                    case 6 -> {
+                        Resultados.compararUltimoResultado();
+                        pressEnterToClear(scanner);
+                        escolha = -1;
+                    }
+                    case 7 -> {
                         clearScreen();
-                        System.out.println("Saindo...");
+                        System.out.println("Saindo... Obrigado por usar o programa!");
                         return;
                     }
 
@@ -127,19 +215,34 @@ public class Main {
         System.out.println("...");
     }
 
-    //Imprime 10% finais dos elementos de um array
+    //Imprime os primeiros e últimos 1% dos elementos de um array
     private static void printArray(int[] array) {
-        for (int i = (int) (0.9 * maxV); i < array.length; i++) {
+        int length = array.length;
+        
+        //first 1% (0-1%)
+        System.out.println("Primeiros 1% do array:");
+        int first1Percent = (int) (0.01 * length);
+        for (int i = 0; i < first1Percent; i++) {
             System.out.print(array[i]);
-            if (i < array.length - 1) {
+            if (i < first1Percent - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("\n");
+        
+        //last 1% (99-100%)
+        System.out.println("Últimos 1% do array:");
+        int start99 = (int) (0.99 * length);
+        for (int i = start99; i < length; i++) {
+            System.out.print(array[i]);
+            if (i < length - 1) {
                 System.out.print(", ");
             }
         }
         System.out.println();
     }
-     /**
-     * Clears the console screen
-     */
+
+    //Clears the console screen
     public static void clearScreen() {
         try {
             // For Windows
@@ -157,9 +260,7 @@ public class Main {
         }
     }
 
-    /**
-     * Waits for user to press Enter and then clears the screen
-     */
+    //Waits for user to press Enter and then clears the screen
     public static void pressEnterToClear(Scanner scanner) {
         System.out.println("\nPressione Enter para limpar a tela e continuar...");
         scanner.nextLine();
