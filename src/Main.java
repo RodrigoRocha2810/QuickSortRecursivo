@@ -60,7 +60,7 @@ public class Main {
                         double executionTime = (endTime - startTime) / 1_000_000.0; // Converte para milissegundos
 
                         System.out.println("\nArray completo ordenado:");
-                        printArray(randomArraycopy);
+                        printArrayWithChoice(randomArraycopy, scanner);
 
                         System.out.println("\n=== RESULTADOS ===");
                         System.out.println("Tamanho do array: " + randomArraycopy.length);
@@ -109,7 +109,7 @@ public class Main {
                         double executionTime = (endTime - startTime) / 1_000_000.0; // Converte para milissegundos
                         
                         System.out.println("\nArray completo ordenado:");
-                        printArray(hibridoArray);
+                        printArrayWithChoice(hibridoArray, scanner);
                         
                         System.out.println("\n=== RESULTADOS QUICKSORT HÍBRIDO ===");
                         System.out.println("Tamanho do array: " + hibridoArray.length);
@@ -153,7 +153,7 @@ public class Main {
                         double executionTime = (endTime - startTime) / 1_000_000.0; // Converte para milissegundos
                         
                         System.out.println("\nArray completo ordenado:");
-                        printArray(aprimoradoArray);
+                        printArrayWithChoice(aprimoradoArray, scanner);
                         
                         System.out.println("\n=== RESULTADOS QUICKSORT APRIMORADO ===");
                         System.out.println("Tamanho do array: " + aprimoradoArray.length);
@@ -240,6 +240,60 @@ public class Main {
             }
         }
         System.out.println();
+    }
+    
+    //Imprime apenas os primeiros e últimos 50 elementos de um array
+    private static void printArray50(int[] array) {
+        int length = array.length;
+        
+        if (length <= 100) {
+            // Se o array tem 100 elementos ou menos, imprime tudo
+            System.out.println("Array completo (" + length + " elementos):");
+            for (int i = 0; i < length; i++) {
+                System.out.print(array[i]);
+                if (i < length - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println();
+        } else {
+            // Primeiros 50 elementos
+            System.out.println("Primeiros 50 elementos:");
+            for (int i = 0; i < 50; i++) {
+                System.out.print(array[i]);
+                if (i < 49) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println("\n");
+            
+            // Últimos 50 elementos
+            System.out.println("Últimos 50 elementos:");
+            for (int i = length - 50; i < length; i++) {
+                System.out.print(array[i]);
+                if (i < length - 1) {
+                    System.out.print(", ");
+                }
+            }
+            System.out.println();
+        }
+    }
+    
+    //Imprime array com opção de escolha do usuário
+    private static void printArrayWithChoice(int[] array, Scanner scanner) {
+        System.out.println("\nComo deseja visualizar o array ordenado?");
+        System.out.println("[1] - Primeiros e últimos 1% (padrão)");
+        System.out.println("[2] - Primeiros e últimos 50 elementos");
+        System.out.print("Escolha uma opção (1 ou 2): ");
+        
+        String choice = scanner.nextLine().trim();
+        
+        if (choice.equals("2")) {
+            printArray50(array);
+        } else {
+            // Padrão ou opção inválida
+            printArray(array);
+        }
     }
 
     //Clears the console screen
