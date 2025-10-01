@@ -13,7 +13,7 @@ public class QuickSortR {
     }
     // Implementação do QuickSort Recursivo com tamanho M
     public static void quicksortM(int[] array, int inicio, int fim, int M) {
-        // A condição de parada agora é baseada no tamanho M
+        // A condição de parada é baseada no tamanho M
         comparacoes++;
         if ((fim - inicio + 1) >= M) {
             int indicePivo = particiona(array, inicio, fim);
@@ -23,7 +23,7 @@ public class QuickSortR {
     }
     // Implementação do QuickSort Recursivo com mediana de três e tamanho M
     public static void quicksortA(int[] array, int inicio, int fim, int M) {
-        // A condição de parada agora é baseada no tamanho M
+        // A condição de parada é baseada no tamanho M
         comparacoes++;
         if ((fim - inicio + 1) >= M) {
             int indicePivo = particiona3(array, inicio, fim);
@@ -33,7 +33,7 @@ public class QuickSortR {
     }
 
     
-     // Método responsável APENAS por particionar um sub-vetor. Utiliza a mediana de três e o esquema de Hoare.
+     // Método responsável APENAS por particionar um sub-vetor. Utiliza a mediana de três
     private static int particiona3(int[] array, int inicio, int fim) {
         int pivo = medianaDeTres(array, inicio, fim);
 
