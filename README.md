@@ -1,4 +1,3 @@
-
 # QuickSort Recursivo - Programa de Análise Comparativa
 
 Este programa Java implementa e compara três variantes diferentes do algoritmo QuickSort com recursos abrangentes de teste e rastreamento de resultados.
